@@ -386,9 +386,8 @@
             async startStatusPolling() {
                 const poll = async () => {
                     try {
-                        const response = await fetch(`https://api.github.com/gists/${this.gistId}`);
-                        const gist = await response.json();
-                        const content = JSON.parse(gist.files[Object.keys(gist.files)[0]].content);
+                        const response = await fetch(`https://gist.githubusercontent.com/emilveltchev/${this.gistId}/raw/gistfile0.txt?t=${Date.now()}`);
+                        const content = JSON.parse(await response.text());
                         
                         this.updateState(content);
                         this.updateConnectionStatus(true);
