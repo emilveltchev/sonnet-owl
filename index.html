@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonnet Owl 🦉</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 30% 20%, #0f172a 0%, #1e293b 40%, #334155 100%);
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+            overflow: hidden;
+        }
+        
+        .container {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        /* Geometric Owl */
+        .owl {
+            width: 200px;
+            height: 250px;
+            margin: 0 auto 30px;
+            position: relative;
+            filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.3));
+        }
+        
+        .body {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 160px;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            clip-path: polygon(20% 0%, 80% 0%, 100% 70%, 90% 100%, 10% 100%, 0% 70%);
+            transition: all 0.3s ease;
+        }
+        
+        .chest {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(45deg, #60a5fa, #93c5fd);
+            clip-path: polygon(25% 0%, 75% 0%, 85% 100%, 15% 100%);
+        }
+        
+        .head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
+            z-index: 5;
+        }
+        
+        /* Geometric ears */
+        .ear {
+            position: absolute;
+            top: -10px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            z-index: 3;
+        }
+        
+        .ear.left {
+            left: 20px;
+            border-left: 15px solid transparent;
+            border-right: 15px solid #1e40af;
+            border-bottom: 40px solid #1e40af;
+            transform: rotate(-30deg);
+        }
+        
+        .ear.right {
+            right: 20px;
+            border-left: 15px solid #1e40af;
+            border-right: 15px solid transparent;
+            border-bottom: 40px solid #1e40af;
+            transform: rotate(30deg);
+        }
+        
+        /* Modern geometric eyes */
+        .eyes {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 10;
+        }
+        
+        .eye {
+            width: 35px;
+            height: 35px;
+            background: #ffffff;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .pupil {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: #0f172a;
+            border-radius: 50%;
+            transition: all 0.15s ease;
+        }
+        
+        .pupil::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 5px;
+            height: 5px;
+            background: #60a5fa;
+            border-radius: 50%;
+        }
+        
+        /* Minimalist beak */
+        .beak {
+            position: absolute;
+            top: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
+        }
+        
+        .beak-main {
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 20px solid #f59e0b;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            transform-origin: top center;
+            transition: transform 0.1s ease;
+        }
+        
+        /* Geometric wings */
+        .wing {
+            position: absolute;
+            bottom: 60px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            transform-origin: center;
+            transition: all 0.2s ease;
+        }
+        
+        .wing.left {
+            left: -10px;
+            border-top: 30px solid #2563eb;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid #1d4ed8;
+            border-left: 8px solid transparent;
+        }
+        
+        .wing.right {
+            right: -10px;
+            border-top: 30px solid #2563eb;
+            border-left: 20px solid transparent;
+            border-bottom: 30px solid #1d4ed8;
+            border-right: 8px solid transparent;
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #60a5fa;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        /* Status display */
+        .status-bar {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 15px;
+            padding: 15px 25px;
+            color: #e2e8f0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .status-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .connection {
+            font-size: 0.85rem;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .connection.offline { color: #ef4444; }
+        
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        /* State animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-8px) rotate(1deg); }
+            66% { transform: translateY(-4px) rotate(-1deg); }
+        }
+        
+        @keyframes thinking-scan {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            25% { transform: translate(-70%, -50%) scale(0.9); }
+            50% { transform: translate(-30%, -50%) scale(1.1); }
+            75% { transform: translate(-60%, -50%) scale(0.9); }
+        }
+        
+        @keyframes wing-flap {
+            0%, 100% { transform: scaleY(1) rotate(0deg); }
+            50% { transform: scaleY(0.7) rotate(5deg); }
+        }
+        
+        @keyframes wing-flap-right {
+            0%, 100% { transform: scaleY(1) rotate(0deg); }
+            50% { transform: scaleY(0.7) rotate(-5deg); }
+        }
+        
+        @keyframes beak-talk {
+            0%, 100% { transform: translateX(-50%) scaleY(1); }
+            50% { transform: translateX(-50%) scaleY(0.6); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        @keyframes particle-float {
+            0% { 
+                transform: translate(0, 0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(var(--dx), var(--dy)) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        /* State classes */
+        .owl.idle {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .owl.thinking .pupil {
+            animation: thinking-scan 1.5s ease-in-out infinite;
+        }
+        
+        .owl.typing .wing.left {
+            animation: wing-flap 0.4s ease-in-out infinite;
+        }
+        
+        .owl.typing .wing.right {
+            animation: wing-flap-right 0.4s ease-in-out infinite;
+        }
+        
+        .owl.talking .beak-main {
+            animation: beak-talk 0.5s ease-in-out infinite;
+        }
+        
+        .owl.talking {
+            animation: float 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="owl idle" id="owl">
+            <div class="body">
+                <div class="chest"></div>
+            </div>
+            <div class="head">
+                <div class="ear left"></div>
+                <div class="ear right"></div>
+                <div class="eyes">
+                    <div class="eye">
+                        <div class="pupil"></div>
+                    </div>
+                    <div class="eye">
+                        <div class="pupil"></div>
+                    </div>
+                </div>
+                <div class="beak">
+                    <div class="beak-main"></div>
+                </div>
+            </div>
+            <div class="wing left"></div>
+            <div class="wing right"></div>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-text" id="statusText">Sonnet Owl Online</div>
+            <div class="connection" id="connection">
+                <span class="pulse"></span>
+                <span>Connected</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SonnetOwl {
+            constructor() {
+                this.owl = document.getElementById('owl');
+                this.statusText = document.getElementById('statusText');
+                this.connection = document.getElementById('connection');
+                this.gistId = '9ea2cf79b990e22b5879a53ffeb9ff23';
+                this.pollInterval = 2500;
+                this.lastState = 'idle';
+                this.particles = [];
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupMouseTracking();
+                this.startStatusPolling();
+                this.startParticleSystem();
+            }
+            
+            setupMouseTracking() {
+                document.addEventListener('mousemove', (e) => {
+                    if (this.lastState === 'thinking') return;
+                    
+                    const pupils = document.querySelectorAll('.pupil');
+                    const owlRect = this.owl.getBoundingClientRect();
+                    const centerX = owlRect.left + owlRect.width / 2;
+                    const centerY = owlRect.top + owlRect.height / 2.5;
+                    
+                    const deltaX = e.clientX - centerX;
+                    const deltaY = e.clientY - centerY;
+                    const distance = Math.min(6, Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 25);
+                    
+                    const moveX = (deltaX / Math.abs(deltaX) || 0) * distance;
+                    const moveY = (deltaY / Math.abs(deltaY) || 0) * distance;
+                    
+                    pupils.forEach(pupil => {
+                        pupil.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+                    });
+                });
+            }
+            
+            async startStatusPolling() {
+                const poll = async () => {
+                    try {
+                        const response = await fetch(`https://api.github.com/gists/${this.gistId}`);
+                        const gist = await response.json();
+                        const content = JSON.parse(gist.files[Object.keys(gist.files)[0]].content);
+                        
+                        this.updateState(content);
+                        this.updateConnectionStatus(true);
+                    } catch (error) {
+                        console.error('Status poll failed:', error);
+                        this.updateConnectionStatus(false);
+                    }
+                };
+                
+                poll();
+                setInterval(poll, this.pollInterval);
+            }
+            
+            updateState(content) {
+                let state = content.state;
+                const message = content.msg || '';
+                
+                // Auto-detect talking state
+                if (message.toLowerCase().includes('chatting') || message.toLowerCase().includes('talking')) {
+                    state = 'talking';
+                }
+                
+                if (state !== this.lastState) {
+                    this.owl.className = `owl ${state}`;
+                    this.lastState = state;
+                    this.createStateParticles(state);
+                }
+                
+                this.statusText.textContent = message;
+            }
+            
+            updateConnectionStatus(connected) {
+                if (connected) {
+                    this.connection.classList.remove('offline');
+                    this.connection.innerHTML = '<span class="pulse"></span><span>Live</span>';
+                } else {
+                    this.connection.classList.add('offline');
+                    this.connection.innerHTML = '<span class="pulse"></span><span>Offline</span>';
+                }
+            }
+            
+            createStateParticles(state) {
+                const colors = {
+                    thinking: '#f59e0b',
+                    typing: '#10b981',
+                    talking: '#3b82f6',
+                    idle: '#60a5fa'
+                };
+                
+                for (let i = 0; i < 8; i++) {
+                    setTimeout(() => {
+                        this.createParticle(colors[state] || colors.idle);
+                    }, i * 100);
+                }
+            }
+            
+            createParticle(color) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.background = color;
+                
+                const owlRect = this.owl.getBoundingClientRect();
+                const startX = owlRect.width / 2 + Math.random() * 40 - 20;
+                const startY = owlRect.height / 2 + Math.random() * 40 - 20;
+                
+                particle.style.left = startX + 'px';
+                particle.style.top = startY + 'px';
+                
+                const dx = (Math.random() - 0.5) * 200;
+                const dy = (Math.random() - 0.5) * 200 - 50;
+                
+                particle.style.setProperty('--dx', dx + 'px');
+                particle.style.setProperty('--dy', dy + 'px');
+                particle.style.animation = 'particle-float 2s ease-out forwards';
+                
+                this.owl.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 2000);
+            }
+            
+            startParticleSystem() {
+                setInterval(() => {
+                    if (Math.random() < 0.3) {
+                        this.createParticle('#60a5fa');
+                    }
+                }, 3000);
+            }
+        }
+        
+        // Initialize when page loads
+        new SonnetOwl();
+    </script>
+</body>
+</html>
